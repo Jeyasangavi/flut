@@ -1,5 +1,6 @@
 /*
 run in andriod studio
+need phone like android emulator setup
 
 ADD IN pubspec.yaml:
 
