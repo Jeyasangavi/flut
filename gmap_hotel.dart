@@ -1,7 +1,7 @@
 /*
 
 run in andriod studio
-
+Guys this needs phone like setup in android emulator
 ADD THIS IN pubspec.yaml:
 
 dependencies:
