@@ -17,7 +17,7 @@ dependencies:
 THEN RUN:
 flutter pub get
 guys this needs phone like set up in android emulator 
-as it has database if u want to run in chrome see the code given below this
+as it has database if u want to run in chrome see the code given in line 270
 */
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
