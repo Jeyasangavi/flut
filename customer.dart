@@ -16,6 +16,8 @@ dependencies:
 
 THEN RUN:
 flutter pub get
+guys this needs phone like set up in android emulator 
+but it has database if u want to run in chrome see the code given below this
 */
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
@@ -260,6 +262,174 @@ class _CustomerPageState extends State<CustomerPage> {
                 ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/* code 2 */
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: CustomerPage(),
+    );
+  }
+}
+
+class CustomerPage extends StatefulWidget {
+  @override
+  _CustomerPageState createState() => _CustomerPageState();
+}
+
+class _CustomerPageState extends State<CustomerPage> {
+  List<Map<String, String>> customers = [];
+
+  TextEditingController nameController = TextEditingController();
+  TextEditingController ageController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+
+  void addCustomer() {
+    if (nameController.text.isEmpty ||
+        ageController.text.isEmpty ||
+        phoneController.text.isEmpty) return;
+
+    setState(() {
+      customers.add({
+        "name": nameController.text,
+        "age": ageController.text,
+        "phone": phoneController.text,
+      });
+
+      nameController.clear();
+      ageController.clear();
+      phoneController.clear();
+    });
+  }
+
+  void editCustomer(int index) {
+    nameController.text = customers[index]["name"]!;
+    ageController.text = customers[index]["age"]!;
+    phoneController.text = customers[index]["phone"]!;
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Edit Customer"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(controller: nameController),
+              TextField(controller: ageController),
+              TextField(controller: phoneController),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  customers[index] = {
+                    "name": nameController.text,
+                    "age": ageController.text,
+                    "phone": phoneController.text,
+                  };
+                });
+                Navigator.pop(context);
+              },
+              child: Text("Update"),
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  void deleteCustomer(int index) {
+    setState(() {
+      customers.removeAt(index);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Customer Manager"),
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(12),
+        child: Column(
+          children: [
+            TextField(
+              controller: nameController,
+              decoration: InputDecoration(
+                labelText: "Name",
+                border: OutlineInputBorder(),
+              ),
+            ),
+            SizedBox(height: 10),
+            TextField(
+              controller: ageController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: "Age",
+                border: OutlineInputBorder(),
+              ),
+            ),
+            SizedBox(height: 10),
+            TextField(
+              controller: phoneController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: "Phone",
+                border: OutlineInputBorder(),
+              ),
+            ),
+            SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: addCustomer,
+              child: Text("Add Customer"),
+            ),
+            SizedBox(height: 10),
+
+            Expanded(
+              child: ListView.builder(
+                itemCount: customers.length,
+                itemBuilder: (context, index) {
+                  return Card(
+                    child: ListTile(
+                      title: Text(customers[index]["name"]!),
+                      subtitle: Text(
+                          "Age: ${customers[index]["age"]} | Phone: ${customers[index]["phone"]}"),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: Icon(Icons.edit),
+                            onPressed: () => editCustomer(index),
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.delete),
+                            onPressed: () => deleteCustomer(index),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
